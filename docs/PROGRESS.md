@@ -33,6 +33,8 @@ Last updated: 2026-09-10 — ALL PHASES COMPLETE ✅
 | `7658841` | fix: project_images sort_order integer overflow → bigint |
 | `f0345b4` | docs: mark all phases complete, live verification checklist |
 | `0b59557` | feat: drag-and-drop image reordering in admin |
+| `9c85b63` | feat: show profile photo in admin nav header |
+| `3695940` | feat: add dynamic profile photo as favicon and admin nav avatar |
 
 ---
 
@@ -79,6 +81,15 @@ Last updated: 2026-09-10 — ALL PHASES COMPLETE ✅
   - Dragged item fades to 45% opacity while dragging
   - On drop: local state updates optimistically, saves to Supabase, shows "Order saved ✓" for 2 seconds
 - `app/admin/projects/actions.ts` — Added `reorderProjectImages()` server action: takes array of `{id, sort_order}` and bulk-updates via `Promise.all`
+
+### Profile photo as favicon — `3695940`
+**Enhancement:** Show Abdullah's profile photo as the browser tab icon instead of a generic favicon.
+
+**Implementation:**
+- `app/layout.tsx` — Added `generateMetadata()` async function that fetches avatar path from Supabase profiles table and constructs full storage URL
+- Dynamic metadata generation sets `icons: { icon: avatarUrl, shortcut: avatarUrl, apple: avatarUrl }` 
+- Falls back to `/favicon.ico` if Supabase fetch fails
+- `components/admin/admin-nav.tsx` — Shows 32px round profile photo in admin header next to email (already implemented previously)
 
 ---
 
