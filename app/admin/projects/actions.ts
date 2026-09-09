@@ -99,10 +99,16 @@ export async function uploadProjectImage(projectId: string, formData: FormData) 
 
   if (uploadError) return { error: uploadError.message };
 
+  // Use count of existing images as sort_order so new images append in order
+  const { count } = await supabase
+    .from("project_images")
+    .select("id", { count: "exact", head: true })
+    .eq("project_id", projectId);
+
   const { error: insertError } = await supabase.from("project_images").insert({
     project_id: projectId,
     storage_path: path,
-    sort_order: Date.now(),
+    sort_order: (count ?? 0) + 1,
   });
 
   if (insertError) return { error: insertError.message };

@@ -244,3 +244,10 @@ create trigger profiles_updated_at
 create trigger site_settings_updated_at
   before update on site_settings
   for each row execute function set_updated_at();
+
+-- ────────────────────────────────────────────────────────────
+-- Migration fix: project_images.sort_order integer → bigint
+-- (integer max ~2.1B was too small for Date.now() timestamps)
+-- ────────────────────────────────────────────────────────────
+-- ALTER TABLE project_images ALTER COLUMN sort_order TYPE bigint;
+-- (already applied directly via Supabase MCP on 2026-09-10)
