@@ -11,7 +11,7 @@ const tabs = [
   { href: "/admin/profile", label: "Profile" },
 ];
 
-export function AdminNav({ email }: { email: string }) {
+export function AdminNav({ email, avatarUrl }: { email: string; avatarUrl: string | null }) {
   const pathname = usePathname();
 
   return (
@@ -35,6 +35,21 @@ export function AdminNav({ email }: { email: string }) {
           })}
         </nav>
         <div className="admin-nav__right">
+          {avatarUrl && (
+            <div
+              style={{
+                width: 32,
+                height: 32,
+                borderRadius: "50%",
+                border: "1px solid var(--border)",
+                backgroundImage: `url(${avatarUrl})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                flexShrink: 0,
+              }}
+              aria-label="Profile photo"
+            />
+          )}
           <span className="muted" style={{ fontSize: "0.82rem" }}>
             {email}
           </span>
