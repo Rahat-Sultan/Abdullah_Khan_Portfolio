@@ -124,4 +124,24 @@ export async function deleteProjectImage(imageId: string, storagePath: string) {
   await supabase.storage.from("portfolio").remove([storagePath]);
   await supabase.from("project_images").delete().eq("id", imageId);
   revalidatePath("/admin/projects");
+  revalidatePath("/");
+  revalidatePath("/projects");
+}
+
+export async function reorderProjectImages(
+  updates: { id: string; sort_order: number }[],
+) {
+  const supabase = await createClient();
+
+  // Update each image's sort_order individually
+  // (Supabase doesn't support bulk update with different values per row)
+  await Promise.all(
+    updates.map(({ id, sort_order }) =>
+      supabase.from("project_images").update({ sort_order }).eq("id", id),
+    ),
+  );
+
+  revalidatePath("/admin/projects");
+  revalidatePath("/");
+  revalidatePath("/projects");
 }
